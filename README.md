@@ -1,5 +1,4 @@
 # ExpCli
----
 An expense management tool for the command-line. Using it, you can track your
 expenses across days, weeks, months and even years - without ever leaving the
 terminal.
@@ -21,7 +20,6 @@ terminal.
 * Can do an export of data to an MS excel datasheet
 
 ## Usage
----
 ## TODO
 - [ ] Analyse software requirements and formalise a requirements document
       according to the waterfall SDLC
