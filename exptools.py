@@ -7,8 +7,6 @@ Student Number: s1802423
 
 def validate_input(user_input, lower_length, upper_length, desired_type):
     """
-    user_input (str), lower_length (int), upper_length (int), desired_type
-    (type) -> bool
     Used for validating user input. It takes the user's input, the lowest
     acceptable length, the highest acceptable length and the desired type of
     input. It then returns a boolean according to whether the user's input
