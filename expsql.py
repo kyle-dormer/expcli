@@ -56,6 +56,3 @@ def get_expenses(category):
         cursor.execute('SELECT * FROM Expense')
 
     return cursor.fetchall()
-
-
-db_init()
