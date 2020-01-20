@@ -24,6 +24,9 @@ def db_init():
     cursor.execute('CREATE TABLE IF NOT EXISTS Category(Name TEXT NOT NULL PRIMARY \
     KEY UNIQUE, Budget REAL)')
 
+    cursor.execute(
+        'CREATE TABLE IF NOT EXISTS Income(Name TEXT NOT NULL PRIMARY KEY UNIQUE, Amount REAL)')
+
 
 def db_close():
     cursor.close()
@@ -53,3 +56,6 @@ def get_expenses(category):
         cursor.execute('SELECT * FROM Expense')
 
     return cursor.fetchall()
+
+
+db_init()
