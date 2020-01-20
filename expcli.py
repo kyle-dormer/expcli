@@ -20,6 +20,12 @@ def get_income():
     for income_source in income_sources:
         monthly_income_total += income_source['source_income']
 
+    try:
+        sql.store_income_sources(income_sources)
+        print('Income sources stored successfully!\n')
+    except (Exception):
+        print('There was an error while storing your income. Please try again!\n')
+
 
 def get_income_sources(income_sources_list):
     """
