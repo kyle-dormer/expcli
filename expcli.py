@@ -57,11 +57,33 @@ def get_categories(categories_list):
     category_name = input('What is the name of the expense category? ')
 
     if ex.validate_input(category_name, 1, 16, str):
-        categories_list.append({'category_name': category_name})
-        repeat = input('Enter another expense category? [Y/n]\n')
+        hasBudget = input('Does this category have a set budget? [Y/n]\n')
 
-        if repeat.lower() == 'y':
-            get_categories(categories_list)
+        if hasBudget.lower() == 'y':
+            category_budget = input('Budget for ' + category_name + ': ')
+
+            try:
+                category_budget = float(category_budget)
+                categories_list.append({'category_name': category_name,
+                                        'category_budget': category_budget})
+
+                repeat = input('Enter another expense category? [Y/n]\n')
+
+                if repeat.lower() == 'y':
+                    get_categories(categories_list)
+
+            except (Exception):
+                print('Invalid input! That\'s not a valid number!')
+                get_categories(categories_list)
+
+        else:
+            categories_list.append({'category_name': category_name,
+                                    'category_budget': None})
+
+            repeat = input('Enter another expense category? [Y/n]\n')
+
+            if repeat.lower() == 'y':
+                get_categories(categories_list)
 
     else:
         print('Invalid input! Your category name is too big or too small!')
