@@ -6,10 +6,11 @@ Student Number: s1802423
 """
 
 import exptools as ex
+import expsql as sql
 
 
 def main():
-    pass
+    sql.db_init()
 
 
 def get_income():
