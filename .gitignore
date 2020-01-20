@@ -1,1 +1,9 @@
 *.swp
+DatabaseDraft.drawio
+Report.aux
+Report.log
+Report.toc
+__pycache__/__main__.cpython-37.pyc
+__pycache__/expcli.cpython-37.pyc
+__pycache__/exptools.cpython-37.pyc
+.vscode/settings.json
