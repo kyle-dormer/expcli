@@ -56,3 +56,18 @@ def get_expenses(category):
         cursor.execute('SELECT * FROM Expense')
 
     return cursor.fetchall()
+
+
+def store_income_source(income_source):
+    cursor.execute('INSERT INTO Income(Name, Amount) VALUES (?, ?)',
+                   (income_source['source_name'], income_source['source_income']))
+
+    connection.commit()
+
+
+def store_income_sources(source_array):
+    for source in source_array:
+        cursor.execute('INSERT INTO Income(Name, Amount) VALUES (?, ?)',
+                       (source['source_name'], source['source_income']))
+
+    connection.commit()
