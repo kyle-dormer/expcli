@@ -38,3 +38,18 @@ def store_expense(date, category, amount):
         'INSERT INTO Expense(Date, Category, Amount) VALUES (?, ?, ?)', (date, category, amount))
 
     connection.commit()
+
+
+def get_expense(ID):
+    cursor.execute('SELECT * FROM Expense WHERE ID=?', (ID,))
+    expense = cursor.fetchone()
+    return expense
+
+
+def get_expenses(category):
+    if category:
+        cursor.execute('SELECT * FROM Expense WHERE Category=?', (category,))
+    elif category is None:
+        cursor.execute('SELECT * FROM Expense')
+
+    return cursor.fetchall()
