@@ -21,3 +21,8 @@ def db_init():
 
     c.execute('CREATE TABLE IF NOT EXISTS Category(Name TEXT NOT NULL PRIMARY \
     KEY UNIQUE, Budget REAL)')
+
+
+def db_close():
+    c.close()
+    conn.close()
