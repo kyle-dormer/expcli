@@ -194,3 +194,37 @@ def get_user_option(option_var):
         get_user_option(option_var)
 
     return option_var
+
+
+def get_category_choice(choice_var):
+    categories = sql.get_categories()
+    category_number = len(categories)
+    index = 1
+
+    if category_number > 0:
+        for category in categories:
+            print(str(index) + '. ' + category)
+            index += 1
+
+        category_choice = input('Choose an expense category: ')
+
+        if ex.validate_input(category_choice, 1, 18, str):
+            try:
+                category_choice = int(category_choice)
+
+                if category_choice in range(1, category_number + 1):
+                    choice_var.append(category_choice)
+                else:
+                    print('Invalid category choice! Please enter a valid category!\n')
+                    get_category_choice(choice_var)
+
+            except (Exception):
+                print('Invalid category choice! Please enter a valid category!\n')
+                get_category_choice(choice_var)
+        else:
+            print('Invalid category choice! Please enter a valid category!\n')
+            get_category_choice(choice_var)
+    else:
+        print('There are currently no expense categories! Please add some before adding your first expenses.\n')
+
+    return choice_var
