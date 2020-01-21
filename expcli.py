@@ -109,6 +109,25 @@ def display_options():
 
     option_choice = get_user_option([])
 
+    if option_choice == 1:
+        pass
+    elif option_choice == 2:
+        pass
+    elif option_choice == 3:
+        pass
+    elif option_choice == 4:
+        pass
+    elif option_choice == 5:
+        pass
+    elif option_choice == 6:
+        pass
+    elif option_choice == 7:
+        pass
+    elif option_choice == 8:
+        pass
+    elif option_choice == 9:
+        pass
+
 
 def get_user_option(option_var):
     option = input('Choose an option: ')
