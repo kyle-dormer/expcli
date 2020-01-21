@@ -14,6 +14,10 @@ def main():
     display_options()
 
 
+def exit_handler():
+    sql.db_close()
+
+
 def get_income():
     income_sources = get_income_sources([])
     monthly_income_total = 0
