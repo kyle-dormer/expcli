@@ -143,24 +143,33 @@ def display_options():
     if option_choice[0] == 1:
         get_income()
         display_options()
+
     elif option_choice[0] == 2:
         monthly_budget = get_monthly_budget([])
         sql.store_monthly_budget(monthly_budget[0])
         display_options()
+
     elif option_choice[0] == 3:
         pass
+
     elif option_choice[0] == 4:
         pass
+
     elif option_choice[0] == 5:
         pass
+
     elif option_choice[0] == 6:
         pass
+
     elif option_choice[0] == 7:
         pass
+
     elif option_choice[0] == 8:
         pass
+
     elif option_choice[0] == 9:
         pass
+
     elif option_choice[0] == 10:
         pass
 
