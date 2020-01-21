@@ -100,3 +100,25 @@ def store_monthly_budget(budget):
         print('Your new monthly budget was stored successfully!\n')
     except (Exception):
         print('There was an error storing your new monthly budget. Please try again!\n')
+
+
+def store_categories(categories_array):
+    try:
+        for category in categories_array:
+            cursor.execute('INSERT INTO Category(Name, Budget) VALUES (?, ?)',
+                           (category['category_name'], category['category_budget']))
+        connection.commit()
+        print('Your expense categories have been stored successfully!\n')
+    except (Exception):
+        print('There was an error storing your expense categories. Please try again!\n')
+
+
+def get_categories():
+    cursor.execute('SELECT * FROM Category')
+
+    categories = []
+
+    for category in cursor.fetchall():
+        categories.append(category[0])
+
+    return categories
