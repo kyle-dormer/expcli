@@ -7,6 +7,7 @@ Student Number: s1802423
 
 import sqlite3
 from datetime import date as d
+from datetime import datetime
 
 connection = sqlite3.connect('expenses.db')
 cursor = connection.cursor()
@@ -18,7 +19,7 @@ def db_init():
                                                   Date TEXT, Category TEXT,   \
                                                   Amount REAL)')
 
-    cursor.execute('CREATE TABLE IF NOT EXISTS Month(Date INTEGER NOT NULL \
+    cursor.execute('CREATE TABLE IF NOT EXISTS Month(Date TEXT NOT NULL \
             PRIMARY KEY UNIQUE, Budget REAL)')
 
     cursor.execute('CREATE TABLE IF NOT EXISTS Category(Name TEXT NOT NULL PRIMARY \
@@ -26,6 +27,8 @@ def db_init():
 
     cursor.execute(
         'CREATE TABLE IF NOT EXISTS Income(Name TEXT NOT NULL PRIMARY KEY UNIQUE, Amount REAL)')
+
+    populate_months()
 
 
 def db_close():
@@ -69,5 +72,17 @@ def store_income_sources(source_array):
     for source in source_array:
         cursor.execute('INSERT INTO Income(Name, Amount) VALUES (?, ?)',
                        (source['source_name'], source['source_income']))
+
+    connection.commit()
+
+
+def populate_months():
+    months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    years = [2019, 2020, 2021, 2022]
+
+    for year in years:
+        for month in months:
+            date_stamp = str(month) + '-' + str(year)
+            cursor.execute('INSERT INTO Month(Date) VALUES (?)', (date_stamp,))
 
     connection.commit()
