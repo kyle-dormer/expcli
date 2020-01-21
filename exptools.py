@@ -5,6 +5,8 @@ Date: 27/10/2019
 Student Number: s1802423
 """
 
+from datetime import datetime
+
 
 def validate_input(user_input, lower_length, upper_length, desired_type):
     """
@@ -16,3 +18,16 @@ def validate_input(user_input, lower_length, upper_length, desired_type):
     return ((len(user_input) >= lower_length) and
             (len(user_input) <= upper_length)) and \
         type(user_input) == desired_type
+
+
+def validate_date(date_string):
+    date_format = '%Y-%m-%d'
+
+    try:
+        datetime_object = datetime.strptime(date_string, date_format)
+
+        if datetime_object:
+            return True
+
+    except (ValueError):
+        return False
