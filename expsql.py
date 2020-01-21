@@ -54,7 +54,8 @@ def get_expense(ID):
 
 def get_expenses(category):
     if category:
-        cursor.execute('SELECT * FROM Expense WHERE Category=?', (category,))
+        cursor.execute(
+            'SELECT * FROM Expense WHERE Category = (?)', (category,))
     elif category is None:
         cursor.execute('SELECT * FROM Expense')
 
@@ -85,4 +86,9 @@ def populate_months():
             date_stamp = str(month) + '-' + str(year)
             cursor.execute('INSERT INTO Month(Date) VALUES (?)', (date_stamp,))
 
+    connection.commit()
+
+
+def store_monthly_budget(budget):
+    cursor.execute('UPDATE Month SET Budget = (?)', (budget,))
     connection.commit()
