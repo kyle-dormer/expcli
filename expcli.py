@@ -6,6 +6,7 @@ Student Number: s1802423
 """
 
 import sys
+from datetime import datetime
 import exptools as ex
 import expsql as sql
 
@@ -150,6 +151,7 @@ def display_options():
 
     elif option_choice[0] == 3:
         expense = get_expense()
+        sql.store_expense(expense)
 
     elif option_choice[0] == 4:
         categories = get_categories([])
@@ -236,6 +238,9 @@ def get_expense_date(date_arr):
     date = input('Enter expense date: ')
 
     if ex.validate_date(date):
+        date_arr.append(date)
+    elif len(date) == 0:
+        date = datetime.now().strftime('%Y-%m-%d')
         date_arr.append(date)
     else:
         print('Incorrect date! Please ensure format is correct!')
