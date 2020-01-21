@@ -139,7 +139,7 @@ def display_options():
         get_income()
     elif option_choice[0] == 2:
         monthly_budget = get_monthly_budget([])
-
+        sql.store_monthly_budget(monthly_budget[0])
     elif option_choice[0] == 3:
         pass
     elif option_choice[0] == 4:
