@@ -78,15 +78,19 @@ def store_income_sources(source_array):
 
 
 def populate_months():
-    months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    years = [2019, 2020, 2021, 2022]
+    cursor.execute('SELECT * FROM Month')
 
-    for year in years:
-        for month in months:
-            date_stamp = str(month) + '-' + str(year)
-            cursor.execute('INSERT INTO Month(Date) VALUES (?)', (date_stamp,))
+    if cursor.fetchone() == None:
+        months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        years = [2019, 2020, 2021, 2022]
 
-    connection.commit()
+        for year in years:
+            for month in months:
+                date_stamp = str(month) + '-' + str(year)
+                cursor.execute(
+                    'INSERT INTO Month(Date) VALUES (?)', (date_stamp,))
+
+        connection.commit()
 
 
 def store_monthly_budget(budget):
