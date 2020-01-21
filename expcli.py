@@ -230,8 +230,17 @@ def get_category_choice(choice_var):
     return choice_var
 
 
-def get_expense_date():
-    pass
+def get_expense_date(date_arr):
+    print('Date format should be YYYY-MM-DD. Leave blank for the current day. ')
+    date = input('Enter expense date: ')
+
+    if ex.validate_date(date):
+        date_arr.append(date)
+    else:
+        print('Incorrect date! Please ensure format is correct!')
+        get_expense_date(date_arr)
+
+    return date_arr
 
 
 def get_expense_amount(amount_arr):
