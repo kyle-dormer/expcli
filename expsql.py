@@ -90,5 +90,9 @@ def populate_months():
 
 
 def store_monthly_budget(budget):
-    cursor.execute('UPDATE Month SET Budget = (?)', (budget,))
-    connection.commit()
+    try:
+        cursor.execute('UPDATE Month SET Budget = (?)', (budget,))
+        connection.commit()
+        print('Your new monthly budget was stored successfully!\n')
+    except (Exception):
+        print('There was an error storing your new monthly budget. Please try again!\n')
