@@ -143,7 +143,7 @@ def get_user_option(option_var):
             get_user_option(option_var)
 
     except (Exception):
-        print('Innvalid option! Please enter the number that corresponds with the desired option from the list.')
+        print('Invalid option! Please enter the number that corresponds with the desired option from the list.')
         get_user_option(option_var)
 
     return option_var
