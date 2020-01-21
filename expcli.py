@@ -5,6 +5,7 @@ Date: 27/10/2019
 Student Number: s1802423
 """
 
+import sys
 import exptools as ex
 import expsql as sql
 
@@ -142,18 +143,17 @@ def display_options():
 
     if option_choice[0] == 1:
         get_income()
-        display_options()
 
     elif option_choice[0] == 2:
         monthly_budget = get_monthly_budget([])
         sql.store_monthly_budget(monthly_budget[0])
-        display_options()
 
     elif option_choice[0] == 3:
         pass
 
     elif option_choice[0] == 4:
-        pass
+        categories = get_categories([])
+        sql.store_categories(categories)
 
     elif option_choice[0] == 5:
         pass
@@ -171,7 +171,9 @@ def display_options():
         pass
 
     elif option_choice[0] == 10:
-        pass
+        sys.exit()
+
+    display_options()
 
 
 def get_user_option(option_var):
