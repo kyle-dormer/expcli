@@ -170,7 +170,7 @@ def get_user_option(option_var):
     try:
         option = int(option)
 
-        if option in range(1, 10):
+        if option in range(1, 11):
             option_var.append(option)
 
         else:
