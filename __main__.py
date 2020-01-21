@@ -6,10 +6,9 @@ Student Number: s1802423
 """
 
 import atexit
-from expcli import main
-from expcli import exit_handler
+
+from expcli import exit_handler, main
+atexit.register(exit_handler)
 
 if __name__ == '__main__':
     main()
-
-atexit.register(exit_handler)
