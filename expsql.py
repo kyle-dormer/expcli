@@ -36,14 +36,13 @@ def db_close():
     connection.close()
 
 
-def store_expense(date, category, amount):
-    if date is None:
-        date = d.today()
-
-    cursor.execute(
-        'INSERT INTO Expense(Date, Category, Amount) VALUES (?, ?, ?)', (date, category, amount))
-
-    connection.commit()
+def store_expense(expense):
+    try:
+        cursor.execute('INSERT INTO Expense(Date, Category, Amount) VALUES (?, ?, ?)',
+                       (expense['date'], expense['category'], expense['amount']))
+        connection.commit()
+    except (Exception):
+        print('There was an error storing your expense! Please try again!\n')
 
 
 def get_expense(ID):
