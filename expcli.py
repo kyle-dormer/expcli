@@ -149,7 +149,7 @@ def display_options():
         sql.store_monthly_budget(monthly_budget[0])
 
     elif option_choice[0] == 3:
-        pass
+        expense = get_expense()
 
     elif option_choice[0] == 4:
         categories = get_categories([])
@@ -258,3 +258,15 @@ def get_expense_amount(amount_arr):
         get_expense_amount(amount_arr)
 
     return amount_arr
+
+
+def get_expense():
+    expense_category = get_category_choice([])
+    expense_date = get_expense_date([])
+    expense_amount = get_expense_amount([])
+
+    if (expense_category and expense_date) and expense_amount:
+        expense = {'category': expense_category[0],
+                   'date': expense_date[0], 'amount': expense_amount[0]}
+
+        return expense
