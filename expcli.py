@@ -228,3 +228,24 @@ def get_category_choice(choice_var):
         print('There are currently no expense categories! Please add some before adding your first expenses.\n')
 
     return choice_var
+
+
+def get_expense_date():
+    pass
+
+
+def get_expense_amount(amount_arr):
+    amount = input('Enter expense amount: ')
+
+    if ex.validate_input(amount, 1, 12, str):
+        try:
+            amount = float(amount)
+            amount_arr.append(amount)
+        except (Exception):
+            print('Invalid amount! Please enter a valid number!\n')
+            get_expense_amount(amount_arr)
+    else:
+        print('Invalid amount! Please enter a valid number!\n')
+        get_expense_amount(amount_arr)
+
+    return amount_arr
