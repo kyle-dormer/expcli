@@ -12,16 +12,26 @@ import expsql as sql
 
 
 def main():
+    """
+    Main function to be called from __main__. 
+    """
     sql.db_init()
     display_options()
 
 
 def exit_handler():
+    """
+    Closes database operation and outputs a farewell message to the user.
+    Called automatically on program exit.
+    """
     sql.db_close()
     print('Have a great day!')
 
 
 def get_income():
+    """
+    Recursively get sources of income from the user and store them in the database.
+    """
     income_sources = get_income_sources([])
     monthly_income_total = 0
 
@@ -179,6 +189,9 @@ def display_options():
 
 
 def get_user_option(option_var):
+    """
+    Get option choice from the user and validate input.
+    """
     option = input('Choose an option: ')
 
     try:
@@ -199,6 +212,9 @@ def get_user_option(option_var):
 
 
 def get_category_choice(choice_var):
+    """
+    Get category of expense from user input.
+    """
     categories = sql.get_categories()
     category_number = len(categories)
     index = 1
@@ -234,6 +250,9 @@ def get_category_choice(choice_var):
 
 
 def get_expense_date(date_arr):
+    """
+    Get and validate date of expense from user input.
+    """
     print('Date format should be YYYY-MM-DD. Leave blank for the current day. ')
     date = input('Enter expense date: ')
 
@@ -250,6 +269,9 @@ def get_expense_date(date_arr):
 
 
 def get_expense_amount(amount_arr):
+    """
+    Get and validate expense amount from user input.
+    """
     amount = input('Enter expense amount: ')
 
     if ex.validate_input(amount, 1, 12, str):
@@ -267,6 +289,9 @@ def get_expense_amount(amount_arr):
 
 
 def get_expense():
+    """
+    Get expense to be stored from user input.
+    """
     expense_category = get_category_choice([])
     expense_date = get_expense_date([])
     expense_amount = get_expense_amount([])

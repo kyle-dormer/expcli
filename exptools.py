@@ -11,9 +11,7 @@ from datetime import datetime
 def validate_input(user_input, lower_length, upper_length, desired_type):
     """
     Used for validating user input. It takes the user's input, the lowest
-    acceptable length, the highest acceptable length and the desired type of
-    input. It then returns a boolean according to whether the user's input
-    matches the given length range and type.
+    acceptable length, the highest acceptable length and the desired type of input. It then returns a boolean according to whether the user's input matches the given length range and type.
     """
     return ((len(user_input) >= lower_length) and
             (len(user_input) <= upper_length)) and \
@@ -21,6 +19,9 @@ def validate_input(user_input, lower_length, upper_length, desired_type):
 
 
 def validate_date(date_string):
+    """
+    Validate data string passed as argument to ensure user inputted data conforms to correct format.
+    """
     date_format = '%Y-%m-%d'
 
     try:
