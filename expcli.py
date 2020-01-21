@@ -16,6 +16,7 @@ def main():
 
 def exit_handler():
     sql.db_close()
+    print('Have a great day!')
 
 
 def get_income():
