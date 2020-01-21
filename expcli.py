@@ -101,6 +101,27 @@ def get_categories(categories_list):
     return categories_list
 
 
+def get_monthly_budget(budget_var):
+    """
+    Recursively get the monthly budget from the user and return it in an array.
+    """
+    monthly_budget = input('Enter monthly budget: ')
+
+    if ex.validate_input(monthly_budget, 1, 18, str):
+        try:
+            monthly_budget = float(monthly_budget)
+            budget_var.append(monthly_budget)
+
+        except (Exception):
+            print('Invalid number, please try again!')
+            get_monthly_budget(budget_var)
+    else:
+        print('Invalid number, please try again!')
+        get_monthly_budget(budget_var)
+
+    return budget_var
+
+
 def display_options():
     """
     Display all possible options to the user, allow them to choose their desired option and then direct program flow towards that desired option. For instance, if option 1 is selected, a method to allow the user to enter monthly income will be called.
@@ -117,7 +138,8 @@ def display_options():
     if option_choice[0] == 1:
         get_income()
     elif option_choice[0] == 2:
-        pass
+        monthly_budget = get_monthly_budget([])
+
     elif option_choice[0] == 3:
         pass
     elif option_choice[0] == 4:
