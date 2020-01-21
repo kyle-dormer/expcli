@@ -213,7 +213,7 @@ def get_category_choice(choice_var):
                 category_choice = int(category_choice)
 
                 if category_choice in range(1, category_number + 1):
-                    choice_var.append(category_choice)
+                    choice_var.append(categories[category_choice - 1])
                 else:
                     print('Invalid category choice! Please enter a valid category!\n')
                     get_category_choice(choice_var)
@@ -225,6 +225,7 @@ def get_category_choice(choice_var):
             print('Invalid category choice! Please enter a valid category!\n')
             get_category_choice(choice_var)
     else:
+        choice_var = None
         print('There are currently no expense categories! Please add some before adding your first expenses.\n')
 
     return choice_var
