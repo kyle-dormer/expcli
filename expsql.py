@@ -81,12 +81,13 @@ def populate_months():
     cursor.execute('SELECT * FROM Month')
 
     if cursor.fetchone() == None:
-        months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        years = [2019, 2020, 2021, 2022]
+        months = ['01', '02', '03', '04', '05',
+                  '06', '07', '08', '09', '10', '11', '12']
+        years = ['2019', '2020']
 
         for year in years:
             for month in months:
-                date_stamp = str(month) + '-' + str(year)
+                date_stamp = year + '-' + month
                 cursor.execute(
                     'INSERT INTO Month(Date) VALUES (?)', (date_stamp,))
 
