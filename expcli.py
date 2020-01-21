@@ -11,6 +11,7 @@ import expsql as sql
 
 def main():
     sql.db_init()
+    display_options()
 
 
 def get_income():
@@ -101,6 +102,10 @@ def get_categories(categories_list):
 
 
 def display_options():
+    """
+    Display all possible options to the user, allow them to choose their desired option and then direct program flow towards that desired option. For instance, if option 1 is selected, a method to allow the user to enter monthly income will be called.
+    """
+
     options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
                '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report']
 
@@ -109,23 +114,23 @@ def display_options():
 
     option_choice = get_user_option([])
 
-    if option_choice == 1:
+    if option_choice[0] == 1:
+        get_income()
+    elif option_choice[0] == 2:
         pass
-    elif option_choice == 2:
+    elif option_choice[0] == 3:
         pass
-    elif option_choice == 3:
+    elif option_choice[0] == 4:
         pass
-    elif option_choice == 4:
+    elif option_choice[0] == 5:
         pass
-    elif option_choice == 5:
+    elif option_choice[0] == 6:
         pass
-    elif option_choice == 6:
+    elif option_choice[0] == 7:
         pass
-    elif option_choice == 7:
+    elif option_choice[0] == 8:
         pass
-    elif option_choice == 8:
-        pass
-    elif option_choice == 9:
+    elif option_choice[0] == 9:
         pass
 
 
