@@ -132,7 +132,7 @@ def display_options():
     """
 
     options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
-               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report']
+               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report', '10. Exit']
 
     for option in options:
         print(option)
@@ -141,9 +141,11 @@ def display_options():
 
     if option_choice[0] == 1:
         get_income()
+        display_options()
     elif option_choice[0] == 2:
         monthly_budget = get_monthly_budget([])
         sql.store_monthly_budget(monthly_budget[0])
+        display_options()
     elif option_choice[0] == 3:
         pass
     elif option_choice[0] == 4:
@@ -157,6 +159,8 @@ def display_options():
     elif option_choice[0] == 8:
         pass
     elif option_choice[0] == 9:
+        pass
+    elif option_choice[0] == 10:
         pass
 
 
