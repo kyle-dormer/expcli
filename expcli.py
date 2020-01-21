@@ -98,3 +98,33 @@ def get_categories(categories_list):
         get_categories(categories_list)
 
     return categories_list
+
+
+def display_options():
+    options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
+               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report']
+
+    for option in options:
+        print(option)
+
+    option_choice = get_user_option([])
+
+
+def get_user_option(option_var):
+    option = input('Choose an option: ')
+
+    try:
+        option = int(option)
+
+        if option in range(1, 10):
+            option_var.append(option)
+
+        else:
+            print('Invalid option! Please enter the number that corresponds with the desired option from the list.')
+            get_user_option(option_var)
+
+    except (Exception):
+        print('Innvalid option! Please enter the number that corresponds with the desired option from the list.')
+        get_user_option(option_var)
+
+    return option_var
