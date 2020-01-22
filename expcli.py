@@ -171,21 +171,24 @@ def display_options():
 
     elif option_choice[0] == 5:
         date = get_expense_date([])
-        expenses = get_display_expenses('day', date[0])
+        expenses = get_display_expenses('day', date[0], None)
         display_expenses(expenses)
 
     elif option_choice[0] == 6:
         date = get_expense_date([])
-        expenses = get_display_expenses('week', date[0])
+        expenses = get_display_expenses('week', date[0], None)
         display_expenses(expenses)
 
     elif option_choice[0] == 7:
         date = get_expense_date([])
-        expenses = get_display_expenses('year', date[0])
+        expenses = get_display_expenses('year', date[0], None)
         display_expenses(expenses)
 
     elif option_choice[0] == 8:
-        pass
+        date = get_expense_date([])
+        category = get_category_choice([])
+        expenses = get_display_expenses('category', date[0], category[0])
+        display_expenses(expenses)
 
     elif option_choice[0] == 9:
         pass
@@ -315,7 +318,7 @@ def get_expense():
         return expense
 
 
-def get_display_expenses(timeframe, date):
+def get_display_expenses(timeframe, date, category):
     expenses = sql.get_expenses(None)
     display_expenses = []
 
@@ -335,6 +338,11 @@ def get_display_expenses(timeframe, date):
 
         for expense in expenses:
             if ex.get_year(expense[1]) == year:
+                display_expenses.append(expense)
+
+    elif timeframe == 'category':
+        for expense in expenses:
+            if expense[2] == category:
                 display_expenses.append(expense)
     else:
         print('Invalid timeframe given! Please try again!\n')
