@@ -147,7 +147,7 @@ def display_options():
     """
 
     options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
-               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report to pdf', '10. Export expense report to csv', '11. Exit']
+               '6. View expense report for week', '7. View expense report for month', '8. View expense report for year', '9. View expense report for category', '10. Export expense report to pdf', '11. Export expense report to csv', '12. Exit']
 
     for option in options:
         print(option)
@@ -181,22 +181,27 @@ def display_options():
 
     elif option_choice[0] == 7:
         date = get_expense_date([])
-        expenses = get_display_expenses('year', date[0], None)
+        expenses = get_display_expenses('month', date[0], None)
         display_expenses(expenses)
 
     elif option_choice[0] == 8:
+        date = get_expense_date([])
+        expenses = get_display_expenses('year', date[0], None)
+        display_expenses(expenses)
+
+    elif option_choice[0] == 9:
         date = get_expense_date([])
         category = get_category_choice([])
         expenses = get_display_expenses('category', date[0], category[0])
         display_expenses(expenses)
 
-    elif option_choice[0] == 9:
-        pass
-
     elif option_choice[0] == 10:
-        ex.export_csv()
+        ex.export_pdf()
 
     elif option_choice[0] == 11:
+        ex.export_csv()
+
+    elif option_choice[0] == 12:
         sys.exit()
 
     display_options()
@@ -211,7 +216,7 @@ def get_user_option(option_var):
     try:
         option = int(option)
 
-        if option in range(1, 12):
+        if option in range(1, 13):
             option_var.append(option)
 
         else:
@@ -338,6 +343,13 @@ def get_display_expenses(timeframe, date, category):
 
         for expense in expenses:
             if ex.get_year(expense[1]) == year:
+                display_expenses.append(expense)
+
+    elif timeframe == 'month':
+        month = ex.get_month(date)
+
+        for expense in expenses:
+            if ex.get_month(expense[1]) == month:
                 display_expenses.append(expense)
 
     elif timeframe == 'category':
