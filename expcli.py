@@ -147,7 +147,7 @@ def display_options():
     """
 
     options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
-               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report to pdf', '10. Exit']
+               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report to pdf', '10. Export expense report to csv', '11. Exit']
 
     for option in options:
         print(option)
@@ -191,6 +191,9 @@ def display_options():
         pass
 
     elif option_choice[0] == 10:
+        pass
+
+    elif option_choice[0] == 11:
         sys.exit()
 
     display_options()
@@ -205,7 +208,7 @@ def get_user_option(option_var):
     try:
         option = int(option)
 
-        if option in range(1, 11):
+        if option in range(1, 12):
             option_var.append(option)
 
         else:
