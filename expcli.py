@@ -6,6 +6,8 @@ Student Number: s1802423
 """
 
 import sys
+import numpy as np
+import pandas as pd
 from datetime import datetime
 import exptools as ex
 import expsql as sql
@@ -301,3 +303,38 @@ def get_expense():
                    'date': expense_date[0], 'amount': expense_amount[0]}
 
         return expense
+
+
+def get_display_expenses(timeframe, date):
+    expenses = sql.get_expenses(None)
+    display_expenses = []
+
+    if timeframe == 'day':
+        for expense in expenses:
+            if expense[1] == date:
+                display_expenses.append(expense)
+    elif timeframe == 'week':
+        week = ex.get_week(date)
+
+        for expense in expenses:
+            if ex.get_week(expense[1]) == week:
+                display_expenses.append(expense)
+
+    elif timeframe == 'year':
+        year = ex.get_year(date)
+
+        for expense in expenses:
+            if ex.get_year(expense[1]) == year:
+                display_expenses.append(expense)
+    else:
+        print('Invalid timeframe given! Please try again!\n')
+
+    return display_expenses
+
+
+def display_expenses(expense_array):
+    pd.set_option('colheader_justify', 'center')
+    data_frame = pd.DataFrame(expense_array,
+                              columns=['ID', 'Date', 'Category', 'Amount'])
+
+    print(data_frame.to_string(index=False))
