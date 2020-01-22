@@ -147,7 +147,7 @@ def display_options():
     """
 
     options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
-               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report', '10. Exit']
+               '6. View expense report for week', '7. View expense report for year', '8. View expense report for category', '9. Export expense report to pdf', '10. Exit']
 
     for option in options:
         print(option)
