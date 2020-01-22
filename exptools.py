@@ -8,6 +8,7 @@ Student Number: s1802423
 from datetime import datetime
 import pandas as pd
 import expsql as sql
+import matplotlib as plt
 
 
 def validate_input(user_input, lower_length, upper_length, desired_type):
@@ -89,10 +90,44 @@ def get_average_expenses(expense_array):
 def export_csv():
     expenses = sql.get_expenses(None)
 
-    try:
-        data_frame = pd.DataFrame(expenses)
-        data_frame.to_csv('expenses.csv')
-        print('Expenses exported successfully!\n')
-    except (Exception):
+    if expenses:
+        try:
+            data_frame = pd.DataFrame(expenses)
+            data_frame.to_csv('expenses.csv')
+            print('Expenses exported successfully!\n')
+        except (Exception):
+            print(
+                'There was an error exporting your expenses to a CSV file! Please try again!\n')
+    else:
         print(
-            'There was an error exporting your expenses to a CSV file! Please try again!\n')
+            'There was an error exporting your expenses to a CSV file! Please try again! Please ensure you have some categories and expenses stored!\n')
+
+
+def export_pdf():
+    expenses = sql.get_expenses(None)
+
+    if expenses:
+        try:
+
+            average_expenses = get_average_expenses(expenses)
+
+            data_frame = pd.DataFrame(average_expenses)
+            data_frame.set_index('Category', drop=True, inplace=True)
+
+            plot = data_frame.plot(kind='bar')
+            plt.pyplot.tight_layout()
+            plt.pyplot.savefig('expenses.pdf')
+
+            print_important('Your expenses were successfully exported to PDF!')
+        except (Exception):
+            print_important(
+                'There was an error exporting your expenses! Please ensure you have both some expenses and expense categories saved!')
+    else:
+        print_important(
+            'There was an error exporting your expenses! Please ensure you have both some expenses and expense categories saved!')
+
+
+def print_important(string):
+    print('\n')
+    print(string)
+    print('\n')
