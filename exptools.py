@@ -32,3 +32,12 @@ def validate_date(date_string):
 
     except (ValueError):
         return False
+
+
+def get_week(date_string):
+    if validate_date(date_string):
+        try:
+            datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
+            return datetime_object.isocalendar()[1]
+        except (TypeError):
+            return False
