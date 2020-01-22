@@ -50,3 +50,23 @@ def get_year(date_string):
             return datetime_object.isocalendar()[0]
         except (TypeError):
             return False
+
+
+def get_average_expenses(expense_array):
+    categories = []
+
+    for expense in expense_array:
+        if not any(category['Category'] == expense[2] for category in categories):
+            categories.append(
+                {'Category': expense[2], 'Total': 0, 'Average': 0})
+
+    for category in categories:
+        expense_count = 0
+        for expense in expense_array:
+            if expense[2] == category['Category']:
+                category['Total'] += expense[3]
+                expense_count += 1
+        category['Average'] = category['Total'] / expense_count
+        expense_count = 0
+
+    return categories

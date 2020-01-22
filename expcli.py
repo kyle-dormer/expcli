@@ -349,6 +349,17 @@ def display_expenses(expense_array):
     print('\n')
     if not data_frame.empty:
         print(sorted_frame.to_string(index=False))
+        display_average_expenses(expense_array)
     else:
         print('No expenses found for that date!')
     print('\n')
+
+
+def display_average_expenses(expense_array):
+    average_expenses = ex.get_average_expenses(expense_array)
+
+    pd.set_option('colheader_justify', 'center')
+    data_frame = pd.DataFrame(average_expenses)
+
+    print('--------------------------------------')
+    print(data_frame.to_string(index=False))
