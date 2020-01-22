@@ -344,9 +344,11 @@ def display_expenses(expense_array):
     data_frame = pd.DataFrame(expense_array,
                               columns=['ID', 'Date', 'Category', 'Amount'])
 
+    sorted_frame = data_frame.sort_values(by='Category')
+
     print('\n')
     if not data_frame.empty:
-        print(data_frame.to_string(index=False))
+        print(sorted_frame.to_string(index=False))
     else:
         print('No expenses found for that date!')
     print('\n')
