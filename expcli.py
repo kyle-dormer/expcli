@@ -170,13 +170,19 @@ def display_options():
         sql.store_categories(categories)
 
     elif option_choice[0] == 5:
-        pass
+        date = get_expense_date([])
+        expenses = get_display_expenses('day', date[0])
+        display_expenses(expenses)
 
     elif option_choice[0] == 6:
-        pass
+        date = get_expense_date([])
+        expenses = get_display_expenses('week', date[0])
+        display_expenses(expenses)
 
     elif option_choice[0] == 7:
-        pass
+        date = get_expense_date([])
+        expenses = get_display_expenses('year', date[0])
+        display_expenses(expenses)
 
     elif option_choice[0] == 8:
         pass
@@ -256,6 +262,7 @@ def get_expense_date(date_arr):
     Get and validate date of expense from user input.
     """
     print('Date format should be YYYY-MM-DD. Leave blank for the current day. ')
+    print('If entering a month or year, enter a date from the same month or year.')
     date = input('Enter expense date: ')
 
     if ex.validate_date(date):
@@ -337,4 +344,9 @@ def display_expenses(expense_array):
     data_frame = pd.DataFrame(expense_array,
                               columns=['ID', 'Date', 'Category', 'Amount'])
 
-    print(data_frame.to_string(index=False))
+    print('\n')
+    if not data_frame.empty:
+        print(data_frame.to_string(index=False))
+    else:
+        print('No expenses found for that date!')
+    print('\n')
