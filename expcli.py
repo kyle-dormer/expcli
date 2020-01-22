@@ -194,7 +194,7 @@ def display_options():
         pass
 
     elif option_choice[0] == 10:
-        pass
+        ex.export_csv()
 
     elif option_choice[0] == 11:
         sys.exit()

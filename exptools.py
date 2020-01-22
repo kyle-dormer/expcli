@@ -6,6 +6,7 @@ Student Number: s1802423
 """
 
 from datetime import datetime
+import pandas as pd
 import expsql as sql
 
 
@@ -83,3 +84,15 @@ def get_average_expenses(expense_array):
         expense_count = 0
 
     return categories
+
+
+def export_csv():
+    expenses = sql.get_expenses(None)
+
+    try:
+        data_frame = pd.DataFrame(expenses)
+        data_frame.to_csv('expenses.csv')
+        print('Expenses exported successfully!\n')
+    except (Exception):
+        print(
+            'There was an error exporting your expenses to a CSV file! Please try again!\n')
