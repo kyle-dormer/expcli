@@ -72,10 +72,13 @@ def get_average_expenses(expense_array):
 
         category['Average'] = category['Total'] / expense_count
 
-        if category['Total'] > budget[0]:
-            category['Budget'] = 'Over'
-        else:
-            category['Budget'] = 'Under'
+        try:
+            if category['Total'] > budget[0]:
+                category['Budget'] = 'Over'
+            else:
+                category['Budget'] = 'Under'
+        except (TypeError):
+            category['Budget'] = 'None'
 
         expense_count = 0
 
