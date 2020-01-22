@@ -6,6 +6,7 @@ Student Number: s1802423
 """
 
 from datetime import datetime
+import expsql as sql
 
 
 def validate_input(user_input, lower_length, upper_length, desired_type):
@@ -58,15 +59,24 @@ def get_average_expenses(expense_array):
     for expense in expense_array:
         if not any(category['Category'] == expense[2] for category in categories):
             categories.append(
-                {'Category': expense[2], 'Total': 0, 'Average': 0})
+                {'Category': expense[2], 'Total': 0, 'Average': 0, 'Budget': None})
 
     for category in categories:
         expense_count = 0
+        budget = sql.get_budget(category['Category'])
+
         for expense in expense_array:
             if expense[2] == category['Category']:
                 category['Total'] += expense[3]
                 expense_count += 1
+
         category['Average'] = category['Total'] / expense_count
+
+        if category['Total'] > budget[0]:
+            category['Budget'] = 'Over'
+        else:
+            category['Budget'] = 'Under'
+
         expense_count = 0
 
     return categories

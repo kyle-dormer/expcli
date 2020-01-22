@@ -156,3 +156,13 @@ def get_categories():
         categories.append(category[0])
 
     return categories
+
+
+def get_budget(category):
+    try:
+        cursor.execute(
+            'SELECT Budget FROM Category WHERE Name = (?)', (category,))
+        budget = cursor.fetchone()
+        return budget
+    except (Exception):
+        print('There was an error fetching the monthly budget! Please try again!\n')
