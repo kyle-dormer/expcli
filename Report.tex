@@ -13,6 +13,19 @@
   \pagenumbering{arabic}
 
   \section{Introduction}
+  This piece of software is a command-line expense management tool. Its intended purpose is to allow the user to enter their income and their expenses and to have them stored and tracked for them. More specifically, the objectives of the software are that the user should be able to:
+  \begin{itemize}
+    \item Enter their monthly income, be it from single or from multiple sources.
+    \item Set an overall monthly budget as well as a budget for categories of expense.
+    \item Enter their expenses based on expense categories.
+    \item Add new expense categories.
+    \item View an exense report in terms of day/week/month/year and also with respect to a category.
+    \item Generate and export a graph of their expenses in \textit{PDF} format.
+    \item The expense report should should inform the user when they are over/under budget for a specific category in a specific month.
+    \item The expense report should also display the average expense per category.
+    \item These objectives should be achieved using a backend \textit{SQLite} database and with the \textit{Pandas} and \textit{Matplotlib} modules.
+  \end{itemize}
+  In retrospect to the development process, all of these objectives have been successfully implemented and achieved relatively smoothly and without issue. The biggest problems faced throughout the development of the software involved averaging the expenses of the user while generating the expense report. Furthermore, displaying the user's expenses in a nicely formatted fashion in a command-line environment proved difficult, as opposed to implementing a \textit{GUI} solution. The format was solved by designing an algorithm that makes use of Python's concept of \textit{list comprehension} in synergy with the inbuilt \textit{any()} function.
   \section{Design of System}
   \section{Testing the System}
   \section{Demonstrating the System}
