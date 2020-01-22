@@ -27,7 +27,7 @@ def exit_handler():
     Called automatically on program exit.
     """
     sql.db_close()
-    print('Have a great day!')
+    ex.print_important('Have a great day!')
 
 
 def get_income():
@@ -42,9 +42,9 @@ def get_income():
 
     try:
         sql.store_income_sources(income_sources)
-        print('Income sources stored successfully!\n')
+        print('Income sources stored successfully!')
     except (Exception):
-        print('There was an error while storing your income. Please try again!\n')
+        print('There was an error while storing your income. Please try again!')
 
 
 def get_income_sources(income_sources_list):
@@ -132,10 +132,10 @@ def get_monthly_budget(budget_var):
             budget_var.append(monthly_budget)
 
         except (Exception):
-            print('Invalid number, please try again!')
+            ex.print_important('Invalid number, please try again!')
             get_monthly_budget(budget_var)
     else:
-        print('Invalid number, please try again!')
+        ex.print_important('Invalid number, please try again!')
         get_monthly_budget(budget_var)
 
     return budget_var
@@ -220,11 +220,13 @@ def get_user_option(option_var):
             option_var.append(option)
 
         else:
-            print('Invalid option! Please enter the number that corresponds with the desired option from the list.')
+            ex.print_important(
+                'Invalid option! Please enter the number that corresponds with the desired option from the list.')
             get_user_option(option_var)
 
     except (Exception):
-        print('Invalid option! Please enter the number that corresponds with the desired option from the list.')
+        ex.print_important(
+            'Invalid option! Please enter the number that corresponds with the desired option from the list.')
         get_user_option(option_var)
 
     return option_var
@@ -252,18 +254,22 @@ def get_category_choice(choice_var):
                 if category_choice in range(1, category_number + 1):
                     choice_var.append(categories[category_choice - 1])
                 else:
-                    print('Invalid category choice! Please enter a valid category!\n')
+                    ex.print_important(
+                        'Invalid category choice! Please enter a valid category!')
                     get_category_choice(choice_var)
 
             except (Exception):
-                print('Invalid category choice! Please enter a valid category!\n')
+                ex.print_important(
+                    'Invalid category choice! Please enter a valid category!')
                 get_category_choice(choice_var)
         else:
-            print('Invalid category choice! Please enter a valid category!\n')
+            ex.print_important(
+                'Invalid category choice! Please enter a valid category!')
             get_category_choice(choice_var)
     else:
         choice_var = None
-        print('There are currently no expense categories! Please add some before adding your first expenses.\n')
+        ex.print_important(
+            'There are currently no expense categories! Please add some before adding your first expenses.')
 
     return choice_var
 
@@ -282,7 +288,7 @@ def get_expense_date(date_arr):
         date = datetime.now().strftime('%Y-%m-%d')
         date_arr.append(date)
     else:
-        print('Incorrect date! Please ensure format is correct!')
+        ex.print_important('Incorrect date! Please ensure format is correct!')
         get_expense_date(date_arr)
 
     return date_arr
@@ -299,10 +305,11 @@ def get_expense_amount(amount_arr):
             amount = float(amount)
             amount_arr.append(amount)
         except (Exception):
-            print('Invalid amount! Please enter a valid number!\n')
+            ex.print_important(
+                'Invalid amount! Please enter a valid number!')
             get_expense_amount(amount_arr)
     else:
-        print('Invalid amount! Please enter a valid number!\n')
+        ex.print_important('Invalid amount! Please enter a valid number!')
         get_expense_amount(amount_arr)
 
     return amount_arr
@@ -357,7 +364,7 @@ def get_display_expenses(timeframe, date, category):
             if expense[2] == category:
                 display_expenses.append(expense)
     else:
-        print('Invalid timeframe given! Please try again!\n')
+        ex.print_important('Invalid timeframe given! Please try again!')
 
     return display_expenses
 
@@ -369,13 +376,11 @@ def display_expenses(expense_array):
 
     sorted_frame = data_frame.sort_values(by='Category')
 
-    print('\n')
     if not data_frame.empty:
-        print(sorted_frame.to_string(index=False))
+        ex.print_important(sorted_frame.to_string(index=False))
         display_average_expenses(expense_array)
     else:
-        print('No expenses found for that date!')
-    print('\n')
+        ex.print_important('No expenses found for that date!')
 
 
 def display_average_expenses(expense_array):

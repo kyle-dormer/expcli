@@ -103,13 +103,13 @@ def export_csv():
         try:
             data_frame = pd.DataFrame(expenses)
             data_frame.to_csv('expenses.csv')
-            print('Expenses exported successfully!\n')
+            print_important('Expenses exported successfully!')
         except (Exception):
-            print(
-                'There was an error exporting your expenses to a CSV file! Please try again!\n')
+            print_important(
+                'There was an error exporting your expenses to a CSV file! Please try again!')
     else:
-        print(
-            'There was an error exporting your expenses to a CSV file! Please try again! Please ensure you have some categories and expenses stored!\n')
+        print_important(
+            'There was an error exporting your expenses to a CSV file! Please try again! Please ensure you have some categories and expenses stored!')
 
 
 def export_pdf():

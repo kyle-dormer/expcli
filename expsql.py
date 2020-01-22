@@ -6,6 +6,7 @@ Student Number: s1802423
 """
 
 import sqlite3
+import exptools as ex
 from datetime import date as d
 from datetime import datetime
 
@@ -49,10 +50,11 @@ def store_expense(expense):
     try:
         cursor.execute('INSERT INTO Expense(Date, Category, Amount) VALUES (?, ?, ?)',
                        (expense['date'], expense['category'], expense['amount']))
-        print('Expense stored successfully!')
+        ex.print_important('Expense stored successfully!')
         connection.commit()
     except (Exception):
-        print('There was an error storing your expense! Please try again!\n')
+        ex.print_important(
+            'There was an error storing your expense! Please try again!')
 
 
 def get_expense(ID):
@@ -125,9 +127,11 @@ def store_monthly_budget(budget):
     try:
         cursor.execute('UPDATE Month SET Budget = (?)', (budget,))
         connection.commit()
-        print('Your new monthly budget was stored successfully!\n')
+        ex.print_important(
+            'Your new monthly budget was stored successfully!')
     except (Exception):
-        print('There was an error storing your new monthly budget. Please try again!\n')
+        ex.print_important(
+            'There was an error storing your new monthly budget. Please try again!')
 
 
 def store_categories(categories_array):
@@ -139,9 +143,11 @@ def store_categories(categories_array):
             cursor.execute('INSERT INTO Category(Name, Budget) VALUES (?, ?)',
                            (category['category_name'], category['category_budget']))
         connection.commit()
-        print('Your expense categories have been stored successfully!\n')
+        ex.print_important(
+            'Your expense categories have been stored successfully!')
     except (Exception):
-        print('There was an error storing your expense categories. Please try again!\n')
+        ex.print_important(
+            'There was an error storing your expense categories. Please try again!')
 
 
 def get_categories():
@@ -165,4 +171,5 @@ def get_budget(category):
         budget = cursor.fetchone()
         return budget
     except (Exception):
-        print('There was an error fetching the monthly budget! Please try again!\n')
+        ex.print_important(
+            'There was an error fetching the monthly budget! Please try again!')
