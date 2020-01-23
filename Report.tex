@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{float}
 
 
 \begin{document}
@@ -114,6 +115,20 @@
 
     An implementation of the Listing 4 algorithm can be observed in Listing 2.
     This algorithm will be repurposed throughout the program for whenever the user needs to input data (expenses, expense categories, income sources, and monthly budget).
+
+  \subsection{Algorithms for the Objectives}
+  The purpose of this section is to specify algorithms that achieve each objective set out in the specification.
+  \subsubsection{Control Flow}
+  The overall algorithm has been alluded to previously. It will display the options to the user and procedurally carry out the desired option and then recursively allow the user to enter another option (unless the user opts to exit the program).
+
+  The flowchart for this algorithm can be expressed as such.
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{overall_program_flow.png}
+    \caption{The overall control and execution flow of the program.}
+  \end{figure}
+  
+
 
   \section{Testing the System}
   \section{Demonstrating the System}
