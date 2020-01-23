@@ -3,6 +3,8 @@
 \author{Kyle Dormer (S1802423)}
 \date{January 13, 2019}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
 
 
 \begin{document}
@@ -27,6 +29,35 @@
   \end{itemize}
   In retrospect to the development process, all of these objectives have been successfully implemented and achieved relatively smoothly and without issue. The biggest problems faced throughout the development of the software involved averaging the expenses of the user while generating the expense report. Furthermore, displaying the user's expenses in a nicely formatted fashion in a command-line environment proved difficult, as opposed to implementing a \textit{GUI} solution. The format was solved by designing an algorithm that makes use of Python's concept of \textit{list comprehension} in synergy with the inbuilt \textit{any()} function.
   \section{Design of System}
+  \subsection{Design Paradigm}
+  First and foremost, the design of the software is based upon the \textit{procedural} programming paradigm, derived from the \textit{imperative} paradigm.
+  This can very much be reflected in the structure of the codebase. The program functions by the \textit{\_\_main\_\_} module making a call to the \textit{main()} function or \textit{procedure}, which in turn make calls to other functions which also make calls to other functions. An example of this can be observed within \textit{expcli.py}.
+    \begin{lstlisting}[language=Python, caption=An example of procedural program design from \textit{expcli.py}, captionpos=b]
+    option_choice = get_user_option([])
+
+    if option_choice[0] == 1:
+        get_income()
+
+    elif option_choice[0] == 2:
+        monthly_budget = get_monthly_budget([])
+        sql.store_monthly_budget(monthly_budget[0])
+
+    elif option_choice[0] == 3:
+        expense = get_expense()
+        sql.store_expense(expense)
+
+    elif option_choice[0] == 4:
+        categories = get_categories([])
+        sql.store_categories(categories)
+
+    elif option_choice[0] == 5:
+        date = get_expense_date([])
+        expenses = get_display_expenses('day', date[0], None)
+        display_expenses(expenses)
+      \end{lstlisting}
+    As shown in Listing 1, the program obtains the user's choice for which option to take. Depending on the user's choice, the \textit{control flow} of the program is determined by making a function call to the function that corresponds with the user's choice. In fact, when combined with \textit{recursion}, this is how the entirety of the program functions; the user enters their option, the corresponding function calls are made, and then the user enters another option \textit{ad infinitum}.
+
+    The procedural paradigm was chosen in the design of this program due to its focus on using \textit{variables}, \textit{data structures} and \textit{functions} to design and carry out algorithmic tasks. Whereas, for example, the \textit{object-oriented} design paradigm focuses on conceptualising real world concepts as objects that contain both data and methods to interact with said data. In the context of this program, user expenses and input are stored as data structures, more specifically as lists of dictionaries. Therefore, using procedurally designed functions to interact with this data makes more sense. Furthermore, object-oriented programing is often less efficient than procedural programming, and with the relatively simple nature of the data involved in this program (expenses have only 4 properties), object-oriented was not deemed necessary nor favourable. 
   \section{Testing the System}
   \section{Demonstrating the System}
 
@@ -34,5 +65,15 @@
   \section{User Guide}
   \section{Code}
   \section{Test Suites}
+
+  \begin{thebibliography}{9}
+    \bibitem{luca}
+    Cardelli, Luca (1996),
+    \textit{Bad Engineering Properties of Object-Oriented Languages},
+    Digital Equipment Corporation Systems Research Center
+    Sourced from: \url{http://lucacardelli.name/Papers/BadPropertiesOfOO.html},
+    Accessed: [22nd January 2020].
+
+  \end{thebibliography}
 
 \end{document}
