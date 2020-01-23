@@ -135,13 +135,19 @@
     \centering
     \includegraphics[scale=0.4]{monthly_income.png}
     \caption{An algorithm to obtain and store the user's monthly income.}
-
-    
   \end{figure}
 
-
-
-
+  \subsubsection{Set Overall Monthly Budget}
+  Setting the overall monthly budget is a relatively simple process. Firstly, the program will take the user's desired budget as input using the same aforementioned recursive algorithm. Then, it will update the \textit{Budget} field in the database for each month.
+  This can be expressed in pseudocode.
+  \begin{lstlisting}[caption=An algorithm to set the overall monthly budget., captionpos=b]
+    SUB get_budget:
+      INPUT budget
+      IF VALIDATE budget TRUE:
+        UPDATE Budget in Month WITH budget
+      ELSE:
+        get_budget
+  \end{lstlisting}
 
   \section{Testing the System}
   \section{Demonstrating the System}
