@@ -249,6 +249,7 @@
   All operations involving the database will be contained in a module named \textit{expsql.py}.
 
   \section{Testing the System}
+  The testing process used throughout the development of the system has been \textit{black-box testing}. This involves ignoring the inner complexities of the program and instead focusing on its outputs and features. For instance, instead of individually unit testing each and every function, they are tested as a procedural whole. To elaborate, when testing the functionality of inputting and storing an expense, there are 5 functions involved in this process, but instead the testing takes place by inputting the data (and incorrect data) and seeing what the program outputs. The expected output in this case is a message stating that the expense has been successfully stored within the database and then seeing the expense stored within the database. If inputted data isn't in the correct format, the validation capabiliities of the program to handle invalid data are tested. All tests took place by putting an expected output against the actual output.
   \section{Demonstrating the System}
 
   \appendix
