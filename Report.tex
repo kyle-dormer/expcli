@@ -6,6 +6,7 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{float}
+\usepackage{lscape}
 
 
 \begin{document}
@@ -66,6 +67,7 @@
 
   Firstly, splitting the program into individual modules that each handle one area of functionality effectively \textit{encapsulates} complexity. Therefore, once a module has been implemented and thoroughly tested, it can be reused by I or another programmer without knowing how it works. All the knowledge required to use it would be its purpose, its arguments (if it has any) and its output.
   An example of this can be observed many times throughout the codebase of the program, although most notably in the usage of the \textit{exptools} module.
+
   \begin{lstlisting}[language=Python, caption=An example of encapsulation achieved via modular programming in \textit{expcli.py}, captionpos=b]
     def get_monthly_budget(budget_var):
 
@@ -148,6 +150,92 @@
       ELSE:
         get_budget
   \end{lstlisting}
+
+  \subsubsection{Enter Expenses Based on Categories}
+  To allow the user to enter expenses based on categories, the program will get all expense categories from the database and then allow them to choose which category the expense belongs to. It will also get the date of the expense and the amount. Then, the expense will be stored in a data structure consisting of a list of dictionaries, each dictionary containing the amount, date and category.
+  The algorithm for this can be expressed in Python as such.
+  \begin{lstlisting}[language=Python, caption=An algorithm to collect expenses from the user., captionpos=b]
+  def get_expense():
+    expense_category = get_category_choice([])
+    expense_date = get_expense_date([])
+    expense_amount = get_expense_amount([])
+
+    if (expense_category and expense_date) and expense_amount:
+        expense = {'category': expense_category[0],
+                  'date': expense_date[0], 'amount': expense_amount[0]}
+
+        return expense
+  \end{lstlisting}
+
+  The functions \textit{get\_category\_choice()}, \textit{get\_expense\_date()} and \textit{get\_expense\_amount()} will all follow the recursive input algorithm detailed previously. For illustration, the code for \textit{get\_expense\_amount()} can be shown as such.
+
+  \begin{lstlisting}[language=Python, caption=Source code for \textit{get\_expense\_amount()}, captionpos=b]
+  def get_expense_amount(amount_arr):
+    
+    amount = input('Enter expense amount: ')
+
+    if ex.validate_input(amount, 1, 12, str):
+        try:
+            amount = float(amount)
+            amount_arr.append(amount)
+        except (Exception):
+            ex.print_important(
+                'Invalid amount! Please enter a valid number!')
+            get_expense_amount(amount_arr)
+    else:
+        ex.print_important('Invalid amount! Please enter a valid number!')
+        get_expense_amount(amount_arr)
+
+    return amount_arr
+  \end{lstlisting}
+
+  \subsubsection{Add New Categories}
+  Adding new categories remains similar to the previous algorithms. The categories will be collected recursively from the user. Then, the user will have the option of inputting a monthly budget for the category. If yes, the budget is inputted and validated and if no, the budget is set to a Python signal object of \textit{None}.
+
+  \subsubsection{View Expense Report}
+  To display an expense report to the user, the \textit{Pandas} module is used to tabulate the data.
+  The user has the option to see an expense report by day/week/month/year and category. For dates, there will be functions that will get the date specified and check which day/week/month/year it belongs to. Then, each expense that matches this day/week/month/year will be put into an expense array/list. Then, this expense list will be passed to a \textit{Pandas} data frame. Then, using the \textit{to\_string()} method of a data frame object, the data will be sorted by category and displayed in table format to the user.
+
+  \subsubsection{Generate Graph of Expenses in PDF Format and Display Average and Total Expense for Category}
+  The program will use the \textit{matplotlib} module to achieve this. The average and total expenses for each expense category will be fetched from the database. This will be done by pasing an array of all expenses to a function belonging to the \textit{exptools} module. The source code for this function can be observed below in Listing 8. The algorithm takes an array of expense \textit{tuples} as an argument. Then, it uses Python's \textit{any()} function and an iterator to check if the expense category has already been added to the \textit{categories} list. If it hasn't already been added, it is appended to the list in the form of a dictionary with keys for the category name, expense total, expense average and category budget. Once this operation has been completed, the categories list is looped through using a \textit{foreach} loop. For each category in the categories list, the budget for the category is retrieved from the database and added to the corresponding dictionary key. Then, an expense counter variable is declared. All expenses in the expense array will then be iterated through and checked to see if they belong to the current category being looped through. If the expense indeed does belong to the category, the category's total expense becomes equal to its current value added to the new expense's amount and the expense count has one added to it. Then, the category's \textit{mean} average expense is obtained by dividing the category's total expense by the number of expenses within that category, held within the expense count variable.
+  Then, the category's total expense is checked to see if it is lower or higher than the category's set monthly budget. If the category has no budget, it is set to 'None' by handling the \textit{exception} that occurs.
+  Once this process has finished, the list of dictionaries is passed to a \textit{Pandas} data frame object. This object can then be passed to a \textit{matplotlib} bar chart and exported to PDF or it can be displayed in the expense report in tabular format to the user.
+
+  \begin{landscape}
+    \begin{lstlisting}[language=Python, caption=Source code for \textit{get\_average\_expenses().}, captionpos=b]
+      def get_average_expenses(expense_array):
+      categories = []
+
+      for expense in expense_array:
+          if not any(category['Category'] == expense[2] for category in categories):
+              categories.append(
+                  {'Category': expense[2], 'Total': 0, 'Average': 0, 'Budget': None})
+
+      for category in categories:
+          expense_count = 0
+          budget = sql.get_budget(category['Category'])
+
+          for expense in expense_array:
+              if expense[2] == category['Category']:
+                  category['Total'] += expense[3]
+                  expense_count += 1
+
+          category['Average'] = category['Total'] / expense_count
+
+          try:
+              if category['Total'] > budget[0]:
+                  category['Budget'] = 'Over'
+              else:
+                  category['Budget'] = 'Under'
+          except (TypeError):
+              category['Budget'] = 'None'
+
+          expense_count = 0
+
+      return categories
+      
+    \end{lstlisting}
+  \end{landscape}
 
   \section{Testing the System}
   \section{Demonstrating the System}
