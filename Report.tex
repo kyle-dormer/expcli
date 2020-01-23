@@ -113,8 +113,8 @@
           get_input
     \end{lstlisting}
 
-    An implementation of the Listing 4 algorithm can be observed in Listing 2.
-    This algorithm will be repurposed throughout the program for whenever the user needs to input data (expenses, expense categories, income sources, and monthly budget).
+  An implementation of the Listing 4 algorithm can be observed in Listing 2.
+  This algorithm will be repurposed throughout the program for whenever the user needs to input data (expenses, expense categories, income sources, and monthly budget).
 
   \subsection{Algorithms for the Objectives}
   The purpose of this section is to specify algorithms that achieve each objective set out in the specification.
@@ -122,12 +122,25 @@
   The overall algorithm has been alluded to previously. It will display the options to the user and procedurally carry out the desired option and then recursively allow the user to enter another option (unless the user opts to exit the program).
 
   The flowchart for this algorithm can be expressed as such.
+    \begin{figure}[H]
+      \centering
+      \includegraphics[scale=0.4]{overall_program_flow.png}
+      \caption{The overall control and execution flow of the program.}
+    \end{figure}
+
+  \subsubsection{Enter Monthly Income}
+  To obtain the user's monthly income, the algorithm will use recursion as discussed previously. Furthermore, each source of income will be stored in a data structure formed of a list of dictionaries. For instance, the user enters two income sources \textit{'Salary'} and \textit{'Side Job}, the former with an income of \textit{£1000} and the latter with \textit{£250}. Assuming the input is valid, the final data structure would be a list containing two dictionaries. The dictionary would have a key for the name and a key for the income of the source. To store these in the database, a \textit{foreach} loop can be used to loop through each dictionary in the list and gather the income.
+  The algorithm can be expressed in flowchart format as such.
   \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{overall_program_flow.png}
-    \caption{The overall control and execution flow of the program.}
+    \includegraphics[scale=0.4]{monthly_income.png}
+    \caption{An algorithm to obtain and store the user's monthly income.}
+
+    
   \end{figure}
-  
+
+
+
 
 
   \section{Testing the System}
