@@ -90,6 +90,31 @@
   Secondly, as alluded to in the first point, modular programming allows for very effective \textit{code reuse}. Indeed, this was in fact the original reasoning behind the creation of modular programming, first implemented in \textit{ALGOL 68-R} in 1970.\cite{algol}. As can be seen in Listing 2, the \textit{validate\_input()} function can be called (reused) whenever needed.
 
   Thirdly and finally, modular programming achieves \textit{separation of concerns}. This means that each concern (or aspect of functionality) of the program belongs to a self-contained module. This ties in with the first point in that it allows the code of modules to change completely and still work perfectly as long as their expected inputs and outputs remain the same to interface properly with the rest of the program.
+  \subsection{Recursion}
+  Most of the functions, especially functions that gather user input, in this program shall be \textit{recursive}. This involves a function calling itself to achieve a purpose. This is very useful in obtaining user input which must be validated for length or type. One objective of the program is to allow the user to enter their expenses. This will involve the expense's category, expense's date and the expense's amount; a string, string (or \textit{datetime} object) and a float respectively. Furthermore, the strings must be between a minimum and maximum length. However, it is unlikely that the user will perfectly enter the desired input in a proper fashion each time. Therefore if validation of the user's input fails, the program should alert the user to the correct format of input and prompt them again.
+  An algorithm for this could be implemented as pseudocode as such.
+    \begin{lstlisting}[caption=An example pseudocode algorithm to inefficiently obtain valid user input, captionpos=b]
+      WHILE TRUE:
+        GET input
+        IF VALIDATE input FALSE:
+          GET input
+    \end{lstlisting}
+
+  However, this algorithm is flawed in that the user may not enter the input in the correct format even after being prompted, and to deal with this the \textit{if} block would have to keep nesting under itself \textit{ad infinitum}.
+  Therefore, instead of having an infinite loop and a potentially infinite control structure, the function could simply call itself again if the user does not enter the input correctly. This would be resource efficient as it would only be called as much as needed and would simplify and reduce the lines of code needed to be written.
+  The pseudocode for this newly imagined algorithm can be expressed in Listing 4.
+    \begin{lstlisting}[caption=A correct\, recursive algorithm to obtain valid user input, captionpos=b]
+      SUB get_input:
+        GET input
+        IF VALIDATE input TRUE:
+          RETURN input
+        ELSE:
+          get_input
+    \end{lstlisting}
+
+    An implementation of the Listing 4 algorithm can be observed in Listing 2.
+    This algorithm will be repurposed throughout the program for whenever the user needs to input data (expenses, expense categories, income sources, and monthly budget).
+
   \section{Testing the System}
   \section{Demonstrating the System}
 
