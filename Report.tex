@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \title{Expense CLI: A Command-Line Expense Management Program}
 \author{Kyle Dormer (S1802423)}
 \date{January 13, 2019}
@@ -283,7 +283,726 @@
   To exit the program, simply enter option 12 in the menu when prompted.
   
   \section{Code}
-  \section{Test Suites}
+  The code for this program spans across three files.
+
+  \begin{lstlisting}[language=Python, caption=Source code for \textit{expcli.py}.]
+    """
+Author: Kyle Dormer
+Date: 27/10/2019
+Student Number: s1802423
+"""
+
+import sys
+import numpy as np
+import pandas as pd
+from datetime import datetime
+import exptools as ex
+import expsql as sql
+
+
+def main():
+    """
+    Main function to be called from __main__. 
+    """
+    sql.db_init()
+    display_options()
+
+
+def exit_handler():
+    """
+    Closes database operation and outputs a farewell message to the user.
+    Called automatically on program exit.
+    """
+    sql.db_close()
+    ex.print_important('Have a great day!')
+
+
+def get_income():
+    """
+    Recursively get sources of income from the user and store them in the database.
+    """
+    income_sources = get_income_sources([])
+    monthly_income_total = 0
+
+    for income_source in income_sources:
+        monthly_income_total += income_source['source_income']
+
+    try:
+        sql.store_income_sources(income_sources)
+        print('Income sources stored successfully!')
+    except (Exception):
+        print('There was an error while storing your income. Please try again!')
+
+
+def get_income_sources(income_sources_list):
+    """
+    Recursively collects sources of income from the user and returns them in a
+    list of dictionaries.
+    """
+    source_name = input('What is the name of the income source? ')
+
+    if ex.validate_input(source_name, 1, 12, str):
+        source_income = input('What is the monthly income of the source? ')
+
+        try:
+            source_income = float(source_income)
+            income_sources_list.append({'source_name': source_name,
+                                        'source_income': source_income})
+            repeat = input('Enter another input source? [Y/n]\n')
+
+            if repeat.lower() == 'y':
+                get_income_sources(income_sources_list)
+
+        except (Exception):
+            print('Invalid input! That\'s not a valid number!')
+            get_income_sources(income_sources_list)
+
+    else:
+        print('Invalid input! Your name is too big or too small!')
+        get_income_sources(income_sources_list)
+
+    return income_sources_list
+
+
+def get_categories(categories_list):
+    """
+    Recursively collects categories of expense from the user and returns them
+    in a list of dictionaries.
+    """
+    category_name = input('What is the name of the expense category? ')
+
+    if ex.validate_input(category_name, 1, 16, str):
+        hasBudget = input('Does this category have a set budget? [Y/n]\n')
+
+        if hasBudget.lower() == 'y':
+            category_budget = input('Budget for ' + category_name + ': ')
+
+            try:
+                category_budget = float(category_budget)
+                categories_list.append({'category_name': category_name,
+                                        'category_budget': category_budget})
+
+                repeat = input('Enter another expense category? [Y/n]\n')
+
+                if repeat.lower() == 'y':
+                    get_categories(categories_list)
+
+            except (Exception):
+                print('Invalid input! That\'s not a valid number!')
+                get_categories(categories_list)
+
+        else:
+            categories_list.append({'category_name': category_name,
+                                    'category_budget': None})
+
+            repeat = input('Enter another expense category? [Y/n]\n')
+
+            if repeat.lower() == 'y':
+                get_categories(categories_list)
+
+    else:
+        print('Invalid input! Your category name is too big or too small!')
+        get_categories(categories_list)
+
+    return categories_list
+
+
+def get_monthly_budget(budget_var):
+    """
+    Recursively get the monthly budget from the user and return it in an array.
+    """
+    monthly_budget = input('Enter monthly budget: ')
+
+    if ex.validate_input(monthly_budget, 1, 18, str):
+        try:
+            monthly_budget = float(monthly_budget)
+            budget_var.append(monthly_budget)
+
+        except (Exception):
+            ex.print_important('Invalid number, please try again!')
+            get_monthly_budget(budget_var)
+    else:
+        ex.print_important('Invalid number, please try again!')
+        get_monthly_budget(budget_var)
+
+    return budget_var
+
+
+def display_options():
+    """
+    Display all possible options to the user, allow them to choose their desired option and then direct program flow towards that desired option. For instance, if option 1 is selected, a method to allow the user to enter monthly income will be called.
+    """
+
+    options = ['1. Enter monthly income', '2. Set monthly budget', '3. Enter expense', '4. Add expense category', '5. View expense report for day',
+               '6. View expense report for week', '7. View expense report for month', '8. View expense report for year', '9. View expense report for category', '10. Export expense report to pdf', '11. Export expense report to csv', '12. Exit\n']
+
+    for option in options:
+        print(option)
+
+    option_choice = get_user_option([])
+
+    if option_choice[0] == 1:
+        get_income()
+
+    elif option_choice[0] == 2:
+        monthly_budget = get_monthly_budget([])
+        sql.store_monthly_budget(monthly_budget[0])
+
+    elif option_choice[0] == 3:
+        expense = get_expense()
+        sql.store_expense(expense)
+
+    elif option_choice[0] == 4:
+        categories = get_categories([])
+        sql.store_categories(categories)
+
+    elif option_choice[0] == 5:
+        date = get_expense_date([])
+        expenses = get_display_expenses('day', date[0], None)
+        display_expenses(expenses)
+
+    elif option_choice[0] == 6:
+        date = get_expense_date([])
+        expenses = get_display_expenses('week', date[0], None)
+        display_expenses(expenses)
+
+    elif option_choice[0] == 7:
+        date = get_expense_date([])
+        expenses = get_display_expenses('month', date[0], None)
+        display_expenses(expenses)
+
+    elif option_choice[0] == 8:
+        date = get_expense_date([])
+        expenses = get_display_expenses('year', date[0], None)
+        display_expenses(expenses)
+
+    elif option_choice[0] == 9:
+        date = get_expense_date([])
+        category = get_category_choice([])
+        expenses = get_display_expenses('category', date[0], category[0])
+        display_expenses(expenses)
+
+    elif option_choice[0] == 10:
+        ex.export_pdf()
+
+    elif option_choice[0] == 11:
+        ex.export_csv()
+
+    elif option_choice[0] == 12:
+        sys.exit()
+
+    display_options()
+
+
+def get_user_option(option_var):
+    """
+    Get option choice from the user and validate input.
+    """
+    option = input('Choose an option: ')
+
+    try:
+        option = int(option)
+
+        if option in range(1, 13):
+            option_var.append(option)
+
+        else:
+            ex.print_important(
+                'Invalid option! Please enter the number that corresponds with the desired option from the list.')
+            get_user_option(option_var)
+
+    except (Exception):
+        ex.print_important(
+            'Invalid option! Please enter the number that corresponds with the desired option from the list.')
+        get_user_option(option_var)
+
+    return option_var
+
+
+def get_category_choice(choice_var):
+    """
+    Get category of expense from user input.
+    """
+    categories = sql.get_categories()
+    category_number = len(categories)
+    index = 1
+
+    if category_number > 0:
+        for category in categories:
+            print(str(index) + '. ' + category)
+            index += 1
+
+        category_choice = input('Choose an expense category: ')
+
+        if ex.validate_input(category_choice, 1, 18, str):
+            try:
+                category_choice = int(category_choice)
+
+                if category_choice in range(1, category_number + 1):
+                    choice_var.append(categories[category_choice - 1])
+                else:
+                    ex.print_important(
+                        'Invalid category choice! Please enter a valid category!')
+                    get_category_choice(choice_var)
+
+            except (Exception):
+                ex.print_important(
+                    'Invalid category choice! Please enter a valid category!')
+                get_category_choice(choice_var)
+        else:
+            ex.print_important(
+                'Invalid category choice! Please enter a valid category!')
+            get_category_choice(choice_var)
+    else:
+        choice_var = None
+        ex.print_important(
+            'There are currently no expense categories! Please add some before adding your first expenses.')
+
+    return choice_var
+
+
+def get_expense_date(date_arr):
+    """
+    Get and validate date of expense from user input.
+    """
+    print('Date format should be YYYY-MM-DD. Leave blank for the current day. ')
+    print('If entering a month or year, enter a date from the same month or year.')
+    date = input('Enter expense date: ')
+
+    if ex.validate_date(date):
+        date_arr.append(date)
+    elif len(date) == 0:
+        date = datetime.now().strftime('%Y-%m-%d')
+        date_arr.append(date)
+    else:
+        ex.print_important('Incorrect date! Please ensure format is correct!')
+        get_expense_date(date_arr)
+
+    return date_arr
+
+
+def get_expense_amount(amount_arr):
+    """
+    Get and validate expense amount from user input.
+    """
+    amount = input('Enter expense amount: ')
+
+    if ex.validate_input(amount, 1, 12, str):
+        try:
+            amount = float(amount)
+            amount_arr.append(amount)
+        except (Exception):
+            ex.print_important(
+                'Invalid amount! Please enter a valid number!')
+            get_expense_amount(amount_arr)
+    else:
+        ex.print_important('Invalid amount! Please enter a valid number!')
+        get_expense_amount(amount_arr)
+
+    return amount_arr
+
+
+def get_expense():
+    """
+    Get expense to be stored from user input.
+    """
+    expense_category = get_category_choice([])
+    expense_date = get_expense_date([])
+    expense_amount = get_expense_amount([])
+
+    if (expense_category and expense_date) and expense_amount:
+        expense = {'category': expense_category[0],
+                   'date': expense_date[0], 'amount': expense_amount[0]}
+
+        return expense
+
+
+def get_display_expenses(timeframe, date, category):
+    expenses = sql.get_expenses(None)
+    display_expenses = []
+
+    if timeframe == 'day':
+        for expense in expenses:
+            if expense[1] == date:
+                display_expenses.append(expense)
+    elif timeframe == 'week':
+        week = ex.get_week(date)
+
+        for expense in expenses:
+            if ex.get_week(expense[1]) == week:
+                display_expenses.append(expense)
+
+    elif timeframe == 'year':
+        year = ex.get_year(date)
+
+        for expense in expenses:
+            if ex.get_year(expense[1]) == year:
+                display_expenses.append(expense)
+
+    elif timeframe == 'month':
+        month = ex.get_month(date)
+
+        for expense in expenses:
+            if ex.get_month(expense[1]) == month:
+                display_expenses.append(expense)
+
+    elif timeframe == 'category':
+        for expense in expenses:
+            if expense[2] == category:
+                display_expenses.append(expense)
+    else:
+        ex.print_important('Invalid timeframe given! Please try again!')
+
+    return display_expenses
+
+
+def display_expenses(expense_array):
+    pd.set_option('colheader_justify', 'center')
+    data_frame = pd.DataFrame(expense_array,
+                              columns=['ID', 'Date', 'Category', 'Amount'])
+
+    sorted_frame = data_frame.sort_values(by='Category')
+
+    if not data_frame.empty:
+        ex.print_important(sorted_frame.to_string(index=False))
+        display_average_expenses(expense_array)
+    else:
+        ex.print_important('No expenses found for that date!')
+
+
+def display_average_expenses(expense_array):
+    average_expenses = ex.get_average_expenses(expense_array)
+
+    pd.set_option('colheader_justify', 'center')
+    data_frame = pd.DataFrame(average_expenses)
+
+    print('--------------------------------------')
+    print(data_frame.to_string(index=False))
+  \end{lstlisting}
+
+  \begin{lstlisting}[language=Python, caption=Source code for \textit{exptools.py}.]
+
+    """
+Author: Kyle Dormer
+Date: 27/10/2019
+Student Number: s1802423
+"""
+
+from datetime import datetime
+import pandas as pd
+import expsql as sql
+import matplotlib as plt
+
+
+def validate_input(user_input, lower_length, upper_length, desired_type):
+    """
+    Used for validating user input. It takes the user's input, the lowest
+    acceptable length, the highest acceptable length and the desired type of input. It then returns a boolean according to whether the user's input matches the given length range and type.
+    """
+    return ((len(user_input) >= lower_length) and
+            (len(user_input) <= upper_length)) and \
+        type(user_input) == desired_type
+
+
+def validate_date(date_string):
+    """
+    Validate data string passed as argument to ensure user inputted data conforms to correct format.
+    """
+    date_format = '%Y-%m-%d'
+
+    try:
+        datetime_object = datetime.strptime(date_string, date_format)
+
+        if datetime_object:
+            return True
+
+    except (ValueError):
+        return False
+
+
+def get_week(date_string):
+    if validate_date(date_string):
+        try:
+            datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
+            return datetime_object.isocalendar()[1]
+        except (TypeError):
+            return False
+
+
+def get_month(date_string):
+    if validate_date(date_string):
+        try:
+            datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
+            return datetime_object.month
+        except (TypeError):
+            return False
+
+
+def get_year(date_string):
+    if validate_date(date_string):
+        try:
+            datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
+            return datetime_object.isocalendar()[0]
+        except (TypeError):
+            return False
+
+
+def get_average_expenses(expense_array):
+    categories = []
+
+    for expense in expense_array:
+        if not any(category['Category'] == expense[2] for category in categories):
+            categories.append(
+                {'Category': expense[2], 'Total': 0, 'Average': 0, 'Budget': None})
+
+    for category in categories:
+        expense_count = 0
+        budget = sql.get_budget(category['Category'])
+
+        for expense in expense_array:
+            if expense[2] == category['Category']:
+                category['Total'] += expense[3]
+                expense_count += 1
+
+        category['Average'] = category['Total'] / expense_count
+
+        try:
+            if category['Total'] > budget[0]:
+                category['Budget'] = 'Over'
+            else:
+                category['Budget'] = 'Under'
+        except (TypeError):
+            category['Budget'] = 'None'
+
+        expense_count = 0
+
+    return categories
+
+
+def export_csv():
+    expenses = sql.get_expenses(None)
+
+    if expenses:
+        try:
+            data_frame = pd.DataFrame(expenses)
+            data_frame.to_csv('expenses.csv')
+            print_important('Expenses exported successfully!')
+        except (Exception):
+            print_important(
+                'There was an error exporting your expenses to a CSV file! Please try again!')
+    else:
+        print_important(
+            'There was an error exporting your expenses to a CSV file! Please try again! Please ensure you have some categories and expenses stored!')
+
+
+def export_pdf():
+    expenses = sql.get_expenses(None)
+
+    if expenses:
+        try:
+
+            average_expenses = get_average_expenses(expenses)
+
+            data_frame = pd.DataFrame(average_expenses)
+            data_frame.set_index('Category', drop=True, inplace=True)
+
+            plot = data_frame.plot(kind='bar')
+            plt.pyplot.tight_layout()
+            plt.pyplot.savefig('expenses.pdf')
+
+            print_important('Your expenses were successfully exported to PDF!')
+        except (Exception):
+            print_important(
+                'There was an error exporting your expenses! Please ensure you have both some expenses and expense categories saved!')
+    else:
+        print_important(
+            'There was an error exporting your expenses! Please ensure you have both some expenses and expense categories saved!')
+
+
+def print_important(string):
+    print('\n')
+    print(string)
+    print('\n')
+  \end{lstlisting}
+
+  \begin{lstlisting}[language=Python, caption=Source code for \textit{expsql.py}.]
+
+    """
+Author: Kyle Dormer
+Date: 05/11/2019
+Student Number: s1802423
+"""
+
+import sqlite3
+import exptools as ex
+from datetime import date as d
+from datetime import datetime
+
+connection = sqlite3.connect('expenses.db')
+cursor = connection.cursor()
+
+
+def db_init():
+    """
+    Initialise the database for the application by creating the tables and populating the month table.
+    """
+    cursor.execute('CREATE TABLE IF NOT EXISTS Expense(ID INTEGER NOT NULL PRIMARY \
+                                                  KEY AUTOINCREMENT UNIQUE,   \
+                                                  Date TEXT, Category TEXT,   \
+                                                  Amount REAL)')
+
+    cursor.execute('CREATE TABLE IF NOT EXISTS Month(Date TEXT NOT NULL \
+            PRIMARY KEY UNIQUE, Budget REAL)')
+
+    cursor.execute('CREATE TABLE IF NOT EXISTS Category(Name TEXT NOT NULL PRIMARY \
+    KEY UNIQUE, Budget REAL)')
+
+    cursor.execute(
+        'CREATE TABLE IF NOT EXISTS Income(Name TEXT NOT NULL PRIMARY KEY UNIQUE, Amount REAL)')
+
+    populate_months()
+
+
+def db_close():
+    """
+    Close database connection.
+    """
+    cursor.close()
+    connection.close()
+
+
+def store_expense(expense):
+    """
+    Store the expense given as an argument in the database.
+    """
+    try:
+        cursor.execute('INSERT INTO Expense(Date, Category, Amount) VALUES (?, ?, ?)',
+                       (expense['date'], expense['category'], expense['amount']))
+        ex.print_important('Expense stored successfully!')
+        connection.commit()
+    except (Exception):
+        ex.print_important(
+            'There was an error storing your expense! Please try again!')
+
+
+def get_expense(ID):
+    """
+    Get the expense with the corresponding ID from the database and return it.
+    """
+    cursor.execute('SELECT * FROM Expense WHERE ID=?', (ID,))
+    expense = cursor.fetchone()
+    return expense
+
+
+def get_expenses(category):
+    """
+    Get all expenses from the database and return them.
+    """
+    if category:
+        cursor.execute(
+            'SELECT * FROM Expense WHERE Category = (?)', (category,))
+    elif category is None:
+        cursor.execute('SELECT * FROM Expense')
+
+    return cursor.fetchall()
+
+
+def store_income_source(income_source):
+    """
+    Store the source of income passed as an argument in the database.
+    """
+    cursor.execute('INSERT INTO Income(Name, Amount) VALUES (?, ?)',
+                   (income_source['source_name'], income_source['source_income']))
+
+    connection.commit()
+
+
+def store_income_sources(source_array):
+    """
+    Store each income source in the source array passed in the database.
+    """
+    for source in source_array:
+        cursor.execute('INSERT INTO Income(Name, Amount) VALUES (?, ?)',
+                       (source['source_name'], source['source_income']))
+
+    connection.commit()
+
+
+def populate_months():
+    """
+    Populate the Month table of the database with all months for 2019 and 2020.
+    """
+    cursor.execute('SELECT * FROM Month')
+
+    if cursor.fetchone() == None:
+        months = ['01', '02', '03', '04', '05',
+                  '06', '07', '08', '09', '10', '11', '12']
+        years = ['2019', '2020']
+
+        for year in years:
+            for month in months:
+                date_stamp = year + '-' + month
+                cursor.execute(
+                    'INSERT INTO Month(Date) VALUES (?)', (date_stamp,))
+
+        connection.commit()
+
+
+def store_monthly_budget(budget):
+    """
+    Set the monthly budget for each month in the database. Expected type is float.
+    """
+    try:
+        cursor.execute('UPDATE Month SET Budget = (?)', (budget,))
+        connection.commit()
+        ex.print_important(
+            'Your new monthly budget was stored successfully!')
+    except (Exception):
+        ex.print_important(
+            'There was an error storing your new monthly budget. Please try again!')
+
+
+def store_categories(categories_array):
+    """
+    Store each category in the categories_array argument in the database.
+    """
+    try:
+        for category in categories_array:
+            cursor.execute('INSERT INTO Category(Name, Budget) VALUES (?, ?)',
+                           (category['category_name'], category['category_budget']))
+        connection.commit()
+        ex.print_important(
+            'Your expense categories have been stored successfully!')
+    except (Exception):
+        ex.print_important(
+            'There was an error storing your expense categories. Please try again!')
+
+
+def get_categories():
+    """
+    Get all expense categories from the database and return them.
+    """
+    cursor.execute('SELECT * FROM Category')
+
+    categories = []
+
+    for category in cursor.fetchall():
+        categories.append(category[0])
+
+    return categories
+
+
+def get_budget(category):
+    try:
+        cursor.execute(
+            'SELECT Budget FROM Category WHERE Name = (?)', (category,))
+        budget = cursor.fetchone()
+        return budget
+    except (Exception):
+        ex.print_important(
+            'There was an error fetching the monthly budget! Please try again!')
+
+  \end{lstlisting}
 
   \begin{thebibliography}{9}
     \bibitem{luca}
