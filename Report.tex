@@ -59,6 +59,37 @@
 
   The procedural paradigm was chosen in the design of this program due to its focus on using \textit{variables}, \textit{data structures} and \textit{functions} to design and carry out algorithmic tasks. Whereas, for example, the \textit{object-oriented} design paradigm focuses on conceptualising real world concepts as objects that contain both data and methods to interact with said data. In the context of this program, user expenses and input are stored as data structures, more specifically as lists of dictionaries. Therefore, using procedurally designed functions to interact with this data makes more sense. Furthermore, object-oriented programing is often less efficient than procedural programming\cite{luca}, and with the relatively simple nature of the data involved in this program (expenses have only 4 properties), object-oriented was not deemed necessary nor favourable. 
 
+  \subsection{Modular Programming}
+  In combination with the procedural paradigm, the technique of \textit{modular programing} has also been focused upon throughout the design of this program.
+  There are multiple reasons for this design choice. 
+
+  Firstly, splitting the program into individual modules that each handle one area of functionality effectively \textit{encapsulates} complexity. Therefore, once a module has been implemented and thoroughly tested, it can be reused by I or another programmer without knowing how it works. All the knowledge required to use it would be its purpose, its arguments (if it has any) and its output.
+  An example of this can be observed many times throughout the codebase of the program, although most notably in the usage of the \textit{exptools} module.
+  \begin{lstlisting}[language=Python, caption=An example of encapsulation achieved via modular programming in \textit{expcli.py}, captionpos=b]
+    def get_monthly_budget(budget_var):
+
+      monthly_budget = input('Enter monthly budget: ')
+
+      if ex.validate_input(monthly_budget, 1, 18, str):
+          try:
+              monthly_budget = float(monthly_budget)
+              budget_var.append(monthly_budget)
+
+          except (Exception):
+              ex.print_important('Invalid number, please try again!')
+              get_monthly_budget(budget_var)
+      else:
+          ex.print_important('Invalid number, please try again!')
+          get_monthly_budget(budget_var)
+
+      return budget_var
+    \end{lstlisting} 
+
+  This function's purpose is to recursively collect a monthly budget from the user and makes use of the \textit{validate\_input()} and \textit{print\_important()} functions from the \textit{exptools} module, although in this context its module object is defined as \textit{ex} for shorthand use.
+
+  Secondly, as alluded to in the first point, modular programming allows for very effective \textit{code reuse}. Indeed, this was in fact the original reasoning behind the creation of modular programming, first implemented in \textit{ALGOL 68-R} in 1970.\cite{algol}. As can be seen in Listing 2, the \textit{validate\_input()} function can be called (reused) whenever needed.
+
+  Thirdly and finally, modular programming achieves \textit{separation of concerns}. This means that each concern (or aspect of functionality) of the program belongs to a self-contained module. This ties in with the first point in that it allows the code of modules to change completely and still work perfectly as long as their expected inputs and outputs remain the same to interface properly with the rest of the program.
   \section{Testing the System}
   \section{Demonstrating the System}
 
@@ -74,6 +105,14 @@
     Digital Equipment Corporation Systems Research Center
     Sourced from: \url{http://lucacardelli.name/Papers/BadPropertiesOfOO.html},
     Accessed: [22nd January 2020].
+
+    \bibitem{algol}
+    C. H. Lindsey (University of Manchester) \&
+    H. J. Boom (Mathematisch Centrum, Amsterdam),
+    \textit{A Modules and Separate Compilation Facility for ALGOL 68},
+    Sourced from: \url{http://archive.computerhistory.org/resources/text/algol/ACM_Algol_bulletin/1061719/p19-lindsey.pdf},
+    Accessed: [22nd January 2020].
+
 
   \end{thebibliography}
 
