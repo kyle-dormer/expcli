@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 Author: Kyle Dormer
 Date: 05/11/2019
