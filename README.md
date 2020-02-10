@@ -49,12 +49,3 @@ To achieve a 2:1:
 * Report has good reflection, is coherent and organised, good integration of academic and practical issues, good evaluation of deliverables.
 * Well explained demonstration showing prototype and working application.
 * Good quality and relevant academic references.
-
-## TODO
-- [ ] Analyse software requirements and formalise a requirements document
-      according to the waterfall SDLC
-- [ ] Research and learn SQLite
-- [ ] Design the database (in a normalised format)
-- [ ] Design software (including modules and their subsequent flowcharts and
-      pseudocode)
-- [ ] Implement database in SQLite
