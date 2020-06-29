@@ -8,6 +8,13 @@ This program was originally written as the first assignment in the *Introduction
 ## Installation
 Simply clone the repo into a directory.
 
+### Dependencies
+The project has a few dependencies, all of which can be obtained from `pip`.
+These are:
+* Pandas
+* Numpy
+* sqlite3
+
 ## Usage
 To run the program run the command:
 ```
