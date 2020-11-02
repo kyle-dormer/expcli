@@ -1,4 +1,5 @@
 # ExpCli
+## Grade Received: First - [81/100]
 
 An expense management tool for the command-line. Using it, you can track your
 expenses across days, weeks, months and even years - without ever leaving the terminal.
